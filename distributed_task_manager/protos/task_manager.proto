@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+// Enum for task statuses
+enum TaskStatus {
+  PENDING = 0;       // Task is pending
+  IN_PROGRESS = 1;   // Task is in progress
+  COMPLETED = 2;     // Task is completed
+  CANCELED = 3;      // Task is canceled
+}
+
+// Message representing a task
+message Task {
+  int32 id = 1;            // Unique identifier for the task
+  string title = 2;        // Title of the task
+  string description = 3;  // Description of the task
+  TaskStatus status = 4;   // Status of the task
+  string created_at = 5;   // Timestamp when the task was created
+  string updated_at = 6;   // Timestamp when the task was last updated
+}
+
+// Request message for creating a task
+message CreateTaskRequest {
+  string title = 1;        // Title of the new task
+  string description = 2;  // Description of the new task
+}
+
+// Response message for creating a task
+message CreateTaskResponse {
+  int32 id = 1;            // Unique identifier for the created task
+  string title = 2;        // Title of the created task
+  string description = 3;  // Description of the created task
+  TaskStatus status = 4;   // Status of the created task
+  string created_at = 5;   // Timestamp when the task was created
+  string updated_at = 6;   // Timestamp when the task was last updated
+}
+
+// Request message for retrieving a task
+message GetTaskRequest {
+  int32 id = 1;  // Unique identifier of the task to retrieve
+}
+
+// Response message for retrieving a task
+message GetTaskResponse {
+  int32 id = 1;            // Unique identifier of the retrieved task
+  string title = 2;        // Title of the retrieved task
+  string description = 3;  // Description of the retrieved task
+  TaskStatus status = 4;   // Status of the retrieved task
+  string created_at = 5;   // Timestamp when the task was created
+  string updated_at = 6;   // Timestamp when the task was last updated
+}
+
+// Request message for updating a task's status
+message UpdateTaskStatusRequest {
+  int32 id = 1;          // Unique identifier of the task to update
+  TaskStatus status = 2; // New status of the task
+}
+
+// Response message for updating a task's status
+message UpdateTaskStatusResponse {
+  int32 id = 1;          // Unique identifier of the updated task
+  TaskStatus status = 2; // New status of the updated task
+  string updated_at = 3; // Timestamp when the task was last updated
+}
+
+// Request message for watching a task
+message WatchTaskRequest {
+  int32 id = 1;  // Unique identifier of the task to watch
+}
+
+// Response message for watching a task
+message WatchTaskResponse {
+  int32 id = 1;            // Unique identifier of the task being watched
+  TaskStatus status = 2;   // Current status of the task
+  string created_at = 3;   // Timestamp when the task was created
+  string updated_at = 4;   // Timestamp when the task was last updated
+}
+
+// TaskManager service definition
+service TaskManager {
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);         // RPC for creating a task
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse);                  // RPC for retrieving a task
+  rpc UpdateTaskStatus(UpdateTaskStatusRequest) returns (UpdateTaskStatusResponse); // RPC for updating a task's status
+  rpc WatchTask(WatchTaskRequest) returns (WatchTaskResponse);            // RPC for watching a task
+}
