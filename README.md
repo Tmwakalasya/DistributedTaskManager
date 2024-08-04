@@ -29,3 +29,21 @@ Installing Dependencies
 	1.	Clone the repository:
  		git clone https://github.com/Tmwakalasya/DistributedTaskManager.git
 		cd DistributedTaskManager
+	2.	Create and activate a virtual environment (optional but recommended):
+ 		python -m venv venv
+		source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+  	3.	Install the required dependencies:
+   		pip install grpcio grpcio-tools
+Compiling Protobuf Files
+
+Make sure the .proto files are compiled into Python code. If they are not already compiled, you can do so with:
+python -m grpc_tools.protoc -I=. --python_out=. --grpc_python_out=. distributed_task_manager/protos/task_manager.proto
+
+Usage
+
+Running the Server
+
+Start the gRPC server:
+python server.py
+You should see a log message indicating that the server has started:
+INFO:Server started on port 50051
