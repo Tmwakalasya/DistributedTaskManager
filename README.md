@@ -50,13 +50,13 @@ You should see a log message indicating that the server has started:
  Running the Client
 
 You can create a simple client to interact with the server. Below is an example client script:
-import grpc
-from distributed_task_manager.protos import task_manager_pb2 as pb2
-from distributed_task_manager.protos import task_manager_pb2_grpc as pb2_grpc
+	import grpc
+	from distributed_task_manager.protos import task_manager_pb2 as pb2
+	from distributed_task_manager.protos import task_manager_pb2_grpc as pb2_grpc
 
-def run():
-    # Create a channel to the server
-    with grpc.insecure_channel('localhost:50051') as channel:
+	def run():
+    	# Create a channel to the server
+    	with grpc.insecure_channel('localhost:50051') as channel:
         # Create a stub (client)
         stub = pb2_grpc.TaskManagerStub(channel)
         
@@ -76,8 +76,8 @@ def run():
         # for update in stub.WatchTask(pb2.WatchTaskRequest(id=task.id)):
         #     print(f"Task update: {update}")
 
-if __name__ == '__main__':
-    run()
+	if __name__ == '__main__':
+    		run()
 Methods
 
 CreateTask
