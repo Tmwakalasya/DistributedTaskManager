@@ -16,7 +16,6 @@ class TaskManagerServicer(pb2_grpc.TaskManagerServicer):
 
     def CreateTask(self, request, context):
         try:
-
             task_id = self.next_id
             self.next_id += 1
 
@@ -47,6 +46,65 @@ class TaskManagerServicer(pb2_grpc.TaskManagerServicer):
         except Exception as e:
             logger.error(f"Exception occurred: {e}")
             context.abort(grpc.StatusCode.INTERNAL, "Failed to create task")
+
+    def GetTask(self, request, context):
+        try:
+            task = self.tasks.get(request.id)
+            if task is None:
+                logger.error(f"Task with ID: {request.id} not found")
+                context.abort(grpc.StatusCode.NOT_FOUND, "Task not found")
+            return pb2.GetTaskResponse(
+                id=task.id,
+                title=task.title,
+                description=task.description,
+                status=task.status,
+                created_at=task.created_at,
+                updated_at=task.updated_at
+            )
+        except Exception as e:
+            logger.error(f"Exception occurred: {e}")
+            context.abort(grpc.StatusCode.INTERNAL, "Failed to get task")
+
+    def UpdateTask(self, request, context):
+        try:
+            task = self.tasks.get(request.id)
+            if task is None:
+                logger.error(f"Task with ID: {request.id} not found")
+                context.abort(grpc.StatusCode.NOT_FOUND, "Task not found")
+            task.status = request.status
+            task.updated_at = str(time.time())
+            logger.info(f"Task Updated: {task}")
+
+            return pb2.UpdateTaskResponse(
+                id=task.id,
+                status=task.status,
+                updated_at=task.updated_at
+            )
+        except Exception as e:
+            logger.error(f"Exception occurred: {e}")
+            context.abort(grpc.StatusCode.INTERNAL, "Failed to update task")
+
+    def WatchTask(self, request, context):
+        try:
+            task = self.tasks.get(request.id)
+            if task is None:
+                logger.error(f"Task with ID: {request.id} not found")
+                context.abort(grpc.StatusCode.NOT_FOUND, "Task not found")
+
+            while True:
+                # Stream the task status
+                yield pb2.WatchTaskResponse(
+                    id=task.id,
+                    status=task.status,
+                    created_at=task.created_at,
+                    updated_at=task.updated_at
+                )
+                time.sleep(5)  # Simulate periodic updates
+        except grpc.RpcError as e:
+            logger.error(f"Client disconnected: {e}")
+        except Exception as e:
+            logger.error(f"Exception occurred: {e}")
+            context.abort(grpc.StatusCode.INTERNAL, "Failed to watch task")
 
 
 def serve():
