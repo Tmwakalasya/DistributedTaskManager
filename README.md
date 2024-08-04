@@ -17,3 +17,15 @@ Features
 	•	In-Memory Storage: Tasks are stored in memory for simplicity.
 	•	Error Handling: Comprehensive error handling for all RPC methods.
 	•	Logging: Logs significant events and errors for traceability.
+
+Setup
+
+Prerequisites
+
+	•	Python 3.7 or higher
+	•	gRPC and gRPC tools for Python
+Installing Dependencies
+
+	1.	Clone the repository:
+ 		git clone https://github.com/Tmwakalasya/DistributedTaskManager.git
+		cd DistributedTaskManager
