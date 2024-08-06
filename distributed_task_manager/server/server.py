@@ -65,7 +65,7 @@ class TaskManagerServicer(pb2_grpc.TaskManagerServicer):
             logger.error(f"Exception occurred: {e}")
             context.abort(grpc.StatusCode.INTERNAL, "Failed to get task")
 
-    def UpdateTask(self, request, context):
+    def UpdateTaskStatus(self, request, context):
         try:
             task = self.tasks.get(request.id)
             if task is None:
@@ -75,7 +75,7 @@ class TaskManagerServicer(pb2_grpc.TaskManagerServicer):
             task.updated_at = str(time.time())
             logger.info(f"Task Updated: {task}")
 
-            return pb2.UpdateTaskResponse(
+            return pb2.UpdateTaskStatusResponse(
                 id=task.id,
                 status=task.status,
                 updated_at=task.updated_at
@@ -96,8 +96,8 @@ class TaskManagerServicer(pb2_grpc.TaskManagerServicer):
                 yield pb2.WatchTaskResponse(
                     id=task.id,
                     status=task.status,
-                    created_at=task.created_at,
-                    updated_at=task.updated_at
+                    created_at=str(task.created_at),
+                    updated_at=str(task.updated_at)
                 )
                 time.sleep(5)  # Simulate periodic updates
         except grpc.RpcError as e:
