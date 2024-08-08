@@ -96,11 +96,12 @@ class TaskManagerServicer(pb2_grpc.TaskManagerServicer):
                 yield pb2.WatchTaskResponse(
                     id=task.id,
                     status=task.status,
-                    created_at=str(task.created_at),
-                    updated_at=str(task.updated_at)
+                    created_at=task.created_at,
+                    updated_at=task.updated_at
                 )
                 time.sleep(5)  # Simulate periodic updates
         except grpc.RpcError as e:
+            # Handle client disconnection
             logger.error(f"Client disconnected: {e}")
         except Exception as e:
             logger.error(f"Exception occurred: {e}")
