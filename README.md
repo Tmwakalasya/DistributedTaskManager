@@ -44,7 +44,7 @@ Usage
 Running the Server
 
 Start the gRPC server:
-	python server.py
+        python -m distributed_task_manager.server.server
 You should see a log message indicating that the server has started:
 	INFO:Server started on port 50051
  Running the Client
