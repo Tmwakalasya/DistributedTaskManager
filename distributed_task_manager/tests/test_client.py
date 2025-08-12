@@ -28,20 +28,20 @@ class TaskManagerServicerTest(unittest.TestCase):
         except grpc.RpcError as e:
             self.fail(f"CreateTask failed: {e}")
 
-    def create_task_test(self):
+    def test_create_task(self):
         response = self.create_task("Test", "Test")
         self.assertEqual(response.title, "Test", "Unexpected title")
         self.assertEqual(response.description, "Test", "Unexpected description")
         self.assertEqual(response.status, pb2.TaskStatus.PENDING, "Unexpected status")
 
-    def get_task_test(self):
+    def test_get_task(self):
         create_response = self.create_task("Test", "Test")
         response = self.stub.GetTask(pb2.GetTaskRequest(id=create_response.id))
         self.assertEqual(response.title, "Test", "Unexpected title")
         self.assertEqual(response.description, "Test", "Unexpected description")
         self.assertEqual(response.status, pb2.TaskStatus.PENDING, "Unexpected status")
 
-    def update_task_test(self):
+    def test_update_task(self):
         create_response = self.create_task("Test", "Test")
         try:
             update_response = self.stub.UpdateTaskStatus(pb2.UpdateTaskStatusRequest(id=create_response.id, status=pb2.TaskStatus.COMPLETED))
@@ -49,7 +49,7 @@ class TaskManagerServicerTest(unittest.TestCase):
         except grpc.RpcError as e:
             self.fail(f"UpdateTaskStatus failed: {e}")
 
-    def watch_task_test(self):
+    def test_watch_task(self):
         create_response = self.create_task("Test", "Test")
         try:
             watch_responses = self.stub.WatchTask(pb2.WatchTaskRequest(id=create_response.id))
